@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Porra del Voto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c1611; --bg2:#10201a; --card:#152a21; --card2:#1b3429; --line:#26453a;
+  --ink:#f4eedc; --muted:#9fb3a8; --gold:#e9b949; --gold2:#ffd977; --mint:#4fc39a; --coral:#e58a62; --chip:#203c31;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 Inter,system-ui,sans-serif}
+body{background:radial-gradient(1200px 600px at 10% -10%,#1d3b2e 0%,transparent 60%),radial-gradient(900px 500px at 110% 0%,#2b2a12 0%,transparent 55%),var(--bg);min-height:100vh}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;letter-spacing:-.3px}
+.wrap{max-width:1500px;margin:0 auto;padding:18px 20px 70px}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:22px 24px;border-radius:24px;background:linear-gradient(135deg,#183a2c,#122219 60%,#2a2610);border:1px solid var(--line);box-shadow:0 20px 50px -20px #000;margin-bottom:18px}
+.hero h1{font-size:clamp(30px,5vw,46px);font-weight:800;line-height:1.05}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .sub{color:var(--muted);font-size:16px;margin-top:4px}
+.wallet{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.coin{display:flex;align-items:center;gap:10px;background:#0c1611aa;border:1px solid var(--line);border-radius:16px;padding:8px 14px}
+.coin .lbl{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.coin .val{font:700 24px Inter;font-variant-numeric:tabular-nums}
+.coin .val.g{color:var(--gold2)}
+.av{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:700 16px Inter;color:#0c1611;box-shadow:inset 0 -3px 0 #0003}
+.av.lg{width:58px;height:58px;font-size:20px}
+.tabs{display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--muted);font:600 17px Inter;padding:10px 18px;border-radius:999px;cursor:pointer}
+.tab.on{background:var(--gold);color:#1a1405;border-color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px}
+.goal{border-left:4px solid var(--gold);background:#e9b9490f;border-radius:12px;padding:12px 16px;margin-bottom:18px;color:#e6dfca;font-size:16.5px}
+.goal b{color:var(--gold2)}
+button{font-family:Inter}
+.btn{font:600 17px Inter;border-radius:12px;border:none;padding:11px 18px;cursor:pointer;background:var(--mint);color:#06130d;transition:transform .08s,filter .15s}
+.btn:hover{filter:brightness(1.08)} .btn:active{transform:scale(.97)}
+.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1405}
+.btn.ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+input,select{font:17px Inter;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);outline:none}
+input:focus,select:focus{border-color:var(--gold)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--muted)} .small{font-size:15px}
+.badge{display:inline-flex;align-items:center;gap:6px;font:600 14px Inter;padding:5px 12px;border-radius:999px;background:var(--chip)}
+.badge.open{background:#4fc39a22;color:var(--mint)} .badge.open::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+.badge.closed{background:#e9b94922;color:var(--gold2)}
+.pollbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pchip{background:var(--card);border:1px solid var(--line);color:var(--ink);padding:9px 16px;border-radius:14px;cursor:pointer;font:600 16px Inter}
+.pchip.on{border-color:var(--gold);box-shadow:0 0 0 2px #e9b94955}
+.pollhead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px}
+.pollhead h2{font-size:clamp(24px,3.5vw,32px)}
+.mine{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:linear-gradient(90deg,#e9b94918,transparent);border:1px dashed #e9b94966;border-radius:16px;padding:14px 16px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+.person{background:var(--card2);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:border-color .2s}
+.person:hover{border-color:#3b6553}
+.person.done{border-color:#e9b94977}
+.phead{display:flex;gap:12px;align-items:center;padding:14px 16px;cursor:pointer;user-select:none}
+.phead .nm{font:700 18px Inter;line-height:1.2}
+.phead .meta{font-size:14px;color:var(--muted)}
+.phead .right{margin-left:auto;text-align:right}
+.fav{font-size:14px;color:var(--muted)} .fav b{color:var(--gold2);font-size:17px}
+.pbody{padding:2px 16px 16px;border-top:1px solid var(--line)}
+.grp{font-size:13px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);margin:12px 0 4px}
+.opt{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:7px 10px;border-radius:12px;cursor:pointer;border:1px solid transparent}
+.opt:hover{background:#ffffff08}
+.opt.sel{border-color:var(--mint);background:#4fc39a14}
+.opt.win{border-color:var(--gold);background:#e9b9491c}
+.opt .on{font-weight:600}
+.opt .odds{font:700 17px Inter;color:var(--gold2);font-variant-numeric:tabular-nums}
+.opt .pct{font-size:14px;color:var(--muted)}
+.bar{grid-column:1/-1;height:8px;background:#0c161199;border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),#8fe3c4);border-radius:6px;transition:width .4s}
+.opt.win .bar i{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.slip{margin-top:12px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px}
+.slip .row input{width:120px}
+.quick button{background:var(--chip);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:7px 11px;font:600 15px Inter;cursor:pointer}
+.gain{font-size:15px;color:var(--muted);margin-top:8px} .gain b{color:var(--gold2)}
+.result{display:flex;align-items:center;gap:8px;font-size:15px;margin-top:2px}
+.stamp{display:inline-block;background:var(--gold);color:#1a1405;font:800 13px Inter;padding:3px 9px;border-radius:7px;letter-spacing:.5px;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;font-size:18px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.8px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;align-items:end}
+.pod{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center}
+.pod .av{margin:0 auto 8px}
+.pod.p1{border-color:var(--gold);background:linear-gradient(180deg,#e9b94922,var(--card2));padding-top:26px}
+.pod .big{font:700 22px Inter;color:var(--gold2)}
+.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.rp{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--card2);border:1px solid var(--line);cursor:pointer;color:var(--ink);font:600 16px Inter;text-align:left}
+.rp:hover:not(:disabled){border-color:var(--gold)}
+.rp:disabled{opacity:.4;cursor:not-allowed}
+.pinbox{margin-top:16px;background:var(--bg2);border:1px solid var(--gold);border-radius:16px;padding:16px}
+.rp.cur{border-color:var(--gold);box-shadow:0 0 0 2px #e9b94955}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--gold);color:#1a1405;padding:12px 20px;border-radius:14px;font-weight:700;opacity:0;transition:all .25s;pointer-events:none;max-width:92vw;box-shadow:0 10px 30px #0008}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.center{text-align:center;padding:50px 20px}
+.search{width:300px;max-width:100%}
+.grid2{display:grid;grid-template-columns:3fr 2fr;gap:18px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.podium{gap:6px}.pod{padding:10px}.pod .big{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="center muted">Barajando las fichas…</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const SB_URL = "https://ukexxyrirrkbzrulroae.supabase.co";
+const SB_KEY = "sb_publishable_dtblUUZj204OlC2ImOZNDw_LlOXEFZg";
+const START = 1000, ADMIN = 't01';
+const ROSTER = [
+  "Javier Blanco","Demi El Orejas","Javier Montero","Javier Pastor Sopa Sipa","Nacho Iniesta Muñoz Rojo",
+  "Alberto Vayaojete Teto","Alvaro Molinac","Anatetas Rodriguez","Antonio Pardillo Jurado","Carlos Rayao Tome",
+  "Ignacio Igundio Rayao Toribio","Javier Frenillo Bazaga Ungabulunga","Jorge Negro Hobbit Cañete","Juanma Winnie De Pooh",
+  "Miguel Dela Carrera Mariñas","Pablino Orejon Murillo","Pascual","Prudencio Niño Polla"
+].map((name,i)=>({rid:'t'+String(i+1).padStart(2,'0'), name}));
+const RNAME = Object.fromEntries(ROSTER.map(r=>[r.rid,r.name]));
+const NOVOTE = ["Se abstendrá","No votará"];
+const DEFAULT_PARTIES = "Perce, Perro, Supervivienda, Oldspice";
+
+const S = { sess:null, players:{}, polls:{}, bets:[], ballot:{}, tab:'polls', q:'', cur:null, open:{}, sel:{}, loaded:false, err:false, busy:false, pick:null, showNew:false };
+const $app = document.getElementById('app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => (Math.round(n*10)/10).toLocaleString('es-ES',{maximumFractionDigits:1});
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2800);}
+function hue(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return h;}
+function initials(n){const w=n.split(/\s+/).filter(Boolean);return ((w[0]?.[0]||'?')+(w[1]?.[0]||'')).toUpperCase();}
+const av=(name,cls='')=>`<span class="av ${cls}" style="background:hsl(${hue(name)} 60% 66%)">${esc(initials(name))}</span>`;
+const me = () => S.sess?.rid;
+
+// ---------- API ----------
+async function rpc(fn, args){
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {method:'POST', headers:{apikey:SB_KEY, 'Content-Type':'application/json'}, body:JSON.stringify(args||{})});
+  const txt = await r.text(); let j=null; try{ j = txt ? JSON.parse(txt) : null; }catch(_){}
+  if(!r.ok) throw new Error(j?.message || 'Error de conexión');
+  return j;
+}
+const auth = () => ({p_rid:S.sess.rid, p_pin:S.sess.pin});
+async function refresh(){
+  try{
+    const st = await rpc('get_state');
+    S.players = Object.fromEntries((st.players||[]).map(p=>[p.rid,p]));
+    S.polls = Object.fromEntries((st.polls||[]).map(p=>[p.id,p]));
+    S.bets = st.bets||[];
+    S.loaded = true; S.err = false;
+  }catch(e){ S.err = true; }
+  render();
+}
+async function loadBallot(){ if(!S.sess) return; try{ S.ballot = await rpc('my_ballots', auth()) || {}; }catch(_){ } }
+function saveSess(){ try{ S.sess ? localStorage.setItem('porra_sess', JSON.stringify(S.sess)) : localStorage.removeItem('porra_sess'); }catch(_){} }
+
+// ---------- cálculo ----------
+function optsOf(p){ return [...(p.parties||[]), ...NOVOTE]; }
+function resultOf(pid, rid){ const p=S.polls[pid]; return p && p.status==='closed' ? p.results?.[rid] : undefined; }
+function market(pid, rid){
+  const p=S.polls[pid]; const bets=S.bets.filter(b=>b.poll_id===pid && b.target===rid);
+  const pool=bets.reduce((a,b)=>a+b.amount,0);
+  const byOpt={}; optsOf(p).forEach(o=>byOpt[o]=0); bets.forEach(b=>byOpt[b.option]=(byOpt[b.option]||0)+b.amount);
+  return {bets,pool,byOpt,result:resultOf(pid,rid)};
+}
+function payout(b){
+  const m=market(b.poll_id,b.target); if(m.result===undefined) return null;
+  const win=m.byOpt[m.result]||0;
+  if(win===0) return b.amount;
+  return b.option===m.result ? b.amount*m.pool/win : 0;
+}
+function balance(rid){
+  let bal=START, inPlay=0, won=0, hits=0, n=0;
+  for(const b of S.bets){ if(b.bettor!==rid) continue; n++;
+    bal-=b.amount; const p=payout(b);
+    if(p===null) inPlay+=b.amount; else { bal+=p; won+=p-b.amount; if(p>b.amount) hits++; } }
+  return {bal,inPlay,won,hits,n};
+}
+
+// ---------- acciones ----------
+async function act(fn, okMsg, after){
+  if(S.busy) return; S.busy=true; render();
+  try{ await fn(); if(okMsg) toast(okMsg); if(after) await after(); await refresh(); }
+  catch(e){ toast(e.message || 'No se pudo guardar'); if(/PIN incorrecto/.test(e.message)){ S.sess=null; saveSess(); } }
+  finally{ S.busy=false; render(); }
+}
+function choose(rid){ S.pick = S.pick===rid ? null : rid; render(); setTimeout(()=>document.getElementById('pin')?.focus(),30); }
+function enter(){
+  const rid=S.pick, pin=(document.getElementById('pin')?.value||'').trim();
+  if(!/^\d{4}$/.test(pin)) return toast('El PIN son 4 cifras');
+  const joined=!!S.players[rid];
+  act(async()=>{
+    if(joined){ const ok=await rpc('login',{p_rid:rid,p_pin:pin}); if(!ok) throw new Error('PIN incorrecto'); }
+    else await rpc('join_player',{p_rid:rid,p_pin:pin});
+    S.sess={rid,pin}; saveSess(); S.pick=null;
+  }, joined ? 'Hola de nuevo, '+RNAME[rid] : '¡Bienvenido, '+RNAME[rid]+'! Tienes '+START+' fichas', loadBallot);
+}
+function logout(){ S.sess=null; S.ballot={}; saveSess(); render(); }
+function createPoll(){
+  const title=document.getElementById('ptitle').value.trim().slice(0,120) || '¿Qué votará cada tertuliano?';
+  const parties=[...new Set(document.getElementById('popts').value.split(',').map(s=>s.trim()).filter(Boolean))].filter(o=>!NOVOTE.includes(o)).slice(0,10);
+  if(!parties.length) return toast('Pon al menos una opción de voto');
+  act(async()=>{ S.cur = await rpc('create_poll',{...auth(), p_title:title, p_parties:parties}); S.showNew=false; }, 'Porra abierta 🎲');
+}
+function closePoll(pid){ act(()=>rpc('close_poll',{...auth(), p_poll:pid}), 'Apuestas cerradas. ¡A revelar votos!'); }
+function deletePoll(pid,btn){
+  if(btn.dataset.armed!=='1'){ btn.dataset.armed='1'; btn.textContent='¿Seguro? Pulsa otra vez'; return; }
+  act(()=>rpc('delete_poll',{...auth(), p_poll:pid}), 'Porra borrada');
+}
+function pick(key,opt){ S.sel[key]=opt; render(); }
+function addAmt(key,n){ const el=document.getElementById('a-'+key); el.value=Math.max(0,(Number(el.value)||0)+n); preview(key); }
+function preview(key){
+  const [pid,rid]=key.split('__'); const opt=S.sel[key]; const el=document.getElementById('g-'+key); if(!el) return;
+  const x=Math.floor(Number(document.getElementById('a-'+key)?.value)||0);
+  if(!opt||!x){ el.innerHTML='Elige opción y cantidad para ver lo que cobrarías.'; return; }
+  const m=market(pid,rid); const pool=m.pool+x, on=(m.byOpt[opt]||0)+x;
+  el.innerHTML=`Si ${esc(RNAME[rid])} acaba en «${esc(opt)}», hoy cobrarías <b>${fmt(x*pool/on)}</b> (×${(pool/on).toFixed(2)}). La cuota cambia si apuestan otros.`;
+}
+function placeBet(pid, rid){
+  const key=pid+'__'+rid, opt=S.sel[key];
+  const amt=Math.floor(Number(document.getElementById('a-'+key).value));
+  if(!opt) return toast('Toca una opción primero');
+  if(!(amt>0)) return toast('Pon cuántas fichas');
+  if(amt>balance(me()).bal) return toast('No tienes fichas suficientes');
+  act(async()=>{ await rpc('place_bet',{...auth(), p_poll:pid, p_target:rid, p_option:opt, p_amount:amt}); const el=document.getElementById('a-'+key); if(el) el.value=''; delete S.sel[key]; }, amt+' fichas a «'+opt+'» para '+RNAME[rid]);
+}
+function saveSecret(pid){
+  const v=document.getElementById('s-'+pid).value; if(!v) return toast('Elige tu voto');
+  act(()=>rpc('save_ballot',{...auth(), p_poll:pid, p_option:v}), 'Voto guardado en secreto 🤫', loadBallot);
+}
+function reveal(pid){
+  const v=document.getElementById('r-'+pid)?.value || S.ballot[pid]; if(!v) return toast('Elige tu voto');
+  act(()=>rpc('reveal_vote',{...auth(), p_poll:pid, p_option:v}), 'Voto revelado: '+v);
+}
+function setResult(pid, rid){
+  const v=document.getElementById('x-'+pid+'__'+rid).value; if(!v) return;
+  act(()=>rpc('set_result',{...auth(), p_poll:pid, p_target:rid, p_option:v}), 'Anotado: '+RNAME[rid]+' → '+v);
+}
+
+// ---------- render ----------
+function keepInputs(){ const vals={}; document.querySelectorAll('[data-keep]').forEach(el=>vals[el.id]=el.value); const a=document.activeElement; return {vals, focus:a?.id, sel:[a?.selectionStart,a?.selectionEnd]}; }
+function restoreInputs(k){
+  for(const [id,v] of Object.entries(k.vals)){ const el=document.getElementById(id); if(el && v!=='') el.value=v; }
+  if(k.focus){ const el=document.getElementById(k.focus); if(el){ el.focus(); try{ if(k.sel[0]!=null) el.setSelectionRange(k.sel[0],k.sel[1]); }catch(_){} } }
+  document.querySelectorAll('[id^="g-"]').forEach(el=>preview(el.id.slice(2)));
+}
+function render(){
+  const k=keepInputs();
+  if(!S.loaded){ $app.innerHTML=`<div class="center muted">${S.err?'No se puede conectar. Reintentando…':'Barajando las fichas…'}</div>`; return; }
+  const rid = me() && S.players[me()] ? me() : null;
+  let h=`<div class="hero"><div><h1>La Porra <em>del Voto</em></h1><div class="sub">Unión Tertuliana · ${ROSTER.length} tertulianos · ${Object.keys(S.players).length} jugando${S.err?' · <span style="color:var(--coral)">sin conexión</span>':''}</div></div>`;
+  if(rid){ const b=balance(rid); h+=`<div class="wallet">${av(RNAME[rid])}<div class="coin"><div><div class="lbl">Saldo</div><div class="val g">${fmt(b.bal)}</div></div></div><div class="coin"><div><div class="lbl">En juego</div><div class="val">${fmt(b.inPlay)}</div></div></div><button class="btn ghost" onclick="logout()" title="Salir">Salir</button></div>`; }
+  h+=`</div>`;
+  if(!rid){
+    h+=`<div class="card"><h2 style="font-size:30px;margin-bottom:6px">¿Quién eres?</h2><p class="muted" style="margin-top:0">Toca tu nombre. La primera vez eliges un <b>PIN de 4 cifras</b> (para que nadie apueste por ti) y recibes <b style="color:var(--gold2)">${START} fichas</b>. Si ya entraste, pon tu PIN.</p><div class="roster">`;
+    for(const r of ROSTER){ const joined=!!S.players[r.rid]; h+=`<button class="rp ${S.pick===r.rid?'cur':''}" onclick="choose('${r.rid}')">${av(r.name)}<span>${esc(r.name)}<br><span class="small muted">${joined?'ya dentro · entrar con PIN':'libre · unirme'}</span></span></button>`; }
+    h+=`</div>`;
+    if(S.pick){ const joined=!!S.players[S.pick]; h+=`<div class="pinbox"><b>${esc(RNAME[S.pick])}</b> · ${joined?'pon tu PIN':'elige un PIN de 4 cifras (apúntatelo)'}<div class="row" style="margin-top:10px"><input id="pin" data-keep type="password" inputmode="numeric" maxlength="4" placeholder="••••" style="width:130px;font-size:22px;letter-spacing:6px" onkeydown="if(event.key==='Enter')enter()"><button class="btn gold" onclick="enter()" ${S.busy?'disabled':''}>${joined?'Entrar':'Unirme'}</button></div></div>`; }
+    $app.innerHTML=h+`</div>`; restoreInputs(k); return;
+  }
+  h+=`<nav class="tabs">${[['polls','🎲 Apuestas'],['rank','🏆 Clasificación'],['help','📜 Reglas']].map(([id,l])=>`<button class="tab ${S.tab===id?'on':''}" onclick="S.tab='${id}';render()">${l}</button>`).join('')}</nav>`;
+  h+= S.tab==='polls'?renderPolls(rid) : S.tab==='rank'?renderRank() : renderHelp();
+  $app.innerHTML=h; restoreInputs(k);
+}
+function newPollForm(){
+  return `<div class="card"><h3 style="font-size:22px;margin-bottom:10px">Nueva porra</h3>
+  <div class="row"><input id="ptitle" data-keep placeholder="¿Qué votará cada tertuliano?" style="flex:2;min-width:240px">
+  <input id="popts" data-keep value="${esc(DEFAULT_PARTIES)}" placeholder="A quién puede votar, separado por comas" style="flex:3;min-width:240px">
+  <button class="btn gold" onclick="createPoll()" ${S.busy?'disabled':''}>Abrir porra</button></div>
+  <div class="small muted" style="margin-top:8px">Además se añaden siempre «Se abstendrá» y «No votará».</div></div>`;
+}
+function renderPolls(rid){
+  const polls=Object.entries(S.polls).sort((a,b)=>(a[1].status==='open'?0:1)-(b[1].status==='open'?0:1)||String(b[1].created_at).localeCompare(String(a[1].created_at)));
+  let h=`<div class="goal"><b>Qué es:</b> apostar qué votará cada tertuliano. <b>Cómo se lee:</b> la barra es el % del bote apostado a cada opción y la <b>×cuota</b> dorada es por cuánto se multiplica tu apuesta si aciertas. Lo que nadie ve venir es lo que más paga.</div>`;
+  if(!polls.length) return h+newPollForm();
+  if(!S.cur || !S.polls[S.cur]) S.cur=polls[0][0];
+  h+=`<div class="pollbar">${polls.map(([pid,p])=>`<button class="pchip ${pid===S.cur?'on':''}" onclick="S.cur='${pid}';render()">${p.status==='open'?'🟢':'🏁'} ${esc(p.title)}</button>`).join('')}<button class="pchip" onclick="S.showNew=!S.showNew;render()">＋ Nueva</button></div>`;
+  if(S.showNew) h+=newPollForm();
+  const pid=S.cur, p=S.polls[pid], open=p.status==='open';
+  const canAdmin = p.created_by===rid || rid===ADMIN;
+  const resolved=ROSTER.filter(r=>resultOf(pid,r.rid)!==undefined).length;
+  const totalPool=S.bets.filter(b=>b.poll_id===pid).reduce((a,b)=>a+b.amount,0);
+  h+=`<div class="card"><div class="pollhead"><div><h2>${esc(p.title)}</h2><div class="small muted" style="margin-top:4px">Abierta por ${esc(RNAME[p.created_by]||'?')} · Bote total <b style="color:var(--gold2)">${fmt(totalPool)}</b> fichas</div></div>
+    <div class="row"><span class="badge ${open?'open':'closed'}">${open?'Apuestas abiertas':'Cerrada · '+resolved+'/'+ROSTER.length+' resueltos'}</span>
+    ${canAdmin&&open?`<button class="btn ghost" onclick="closePoll('${pid}')" ${S.busy?'disabled':''}>Cerrar apuestas</button>`:''}
+    ${canAdmin?`<button class="btn ghost" onclick="deletePoll('${pid}',this)" ${S.busy?'disabled':''}>Borrar</button>`:''}</div></div>`;
+  const myRes=resultOf(pid,rid), mySecret=S.ballot[pid];
+  const optSel=(id,sel)=>`<select id="${id}"><option value="">— elige —</option><optgroup label="Votará a">${(p.parties||[]).map(o=>`<option ${o===sel?'selected':''}>${esc(o)}</option>`).join('')}</optgroup><optgroup label="No vota">${NOVOTE.map(o=>`<option ${o===sel?'selected':''}>${esc(o)}</option>`).join('')}</optgroup></select>`;
+  if(open) h+=`<div class="mine">🤫 <div style="flex:1;min-width:200px"><b>Tu voto secreto</b><div class="small muted">Nadie lo ve hasta que cierren y lo reveles.</div></div>${optSel('s-'+pid,mySecret)}<button class="btn ghost" onclick="saveSecret('${pid}')" ${S.busy?'disabled':''}>${mySecret?'Cambiar':'Guardar'}</button></div>`;
+  else if(myRes===undefined) h+=`<div class="mine">🗳️ <div style="flex:1;min-width:200px"><b>Te toca revelar tu voto</b><div class="small muted">Hasta que lo hagas no se pagan las apuestas sobre ti.</div></div>${optSel('r-'+pid,mySecret)}<button class="btn gold" onclick="reveal('${pid}')" ${S.busy?'disabled':''}>Revelar</button></div>`;
+  else h+=`<div class="mine">✅ Tu voto revelado: <b style="color:var(--gold2)">${esc(myRes)}</b></div>`;
+  h+=`<div class="row" style="margin-bottom:12px"><input id="q" data-keep class="search" placeholder="🔍 Buscar tertuliano" oninput="S.q=this.value;render()" value="${esc(S.q)}"><button class="btn ghost" onclick="ROSTER.forEach(r=>S.open[r.rid]=true);render()">Abrir todas</button><button class="btn ghost" onclick="S.open={};render()">Cerrar todas</button></div><div class="grid">`;
+  const q=S.q.trim().toLowerCase();
+  for(const r of ROSTER){
+    if(q && !r.name.toLowerCase().includes(q)) continue;
+    const m=market(pid,r.rid), isMe=r.rid===rid, key=pid+'__'+r.rid, isOpen=!!S.open[r.rid];
+    const fav=Object.entries(m.byOpt).sort((a,b)=>b[1]-a[1])[0];
+    const myStake=m.bets.filter(b=>b.bettor===rid).reduce((a,b)=>a+b.amount,0);
+    const joined=!!S.players[r.rid];
+    h+=`<div class="person ${m.result!==undefined?'done':''}"><div class="phead" onclick="S.open['${r.rid}']=!S.open['${r.rid}'];render()">${av(r.name)}
+      <div><div class="nm">${esc(r.name)}${isMe?' <span class="small" style="color:var(--gold2)">(tú)</span>':''}</div><div class="meta">Bote ${fmt(m.pool)}${myStake?` · tuyo ${fmt(myStake)}`:''}${joined?'':' · aún no ha entrado'}</div></div>
+      <div class="right">${m.result!==undefined?`<span class="stamp">${esc(m.result)}</span>`:fav&&fav[1]?`<div class="fav">favorito<br><b>${esc(fav[0])}</b></div>`:`<div class="fav">sin apuestas</div>`}</div></div>`;
+    if(isOpen){
+      h+=`<div class="pbody">`;
+      if(m.result!==undefined && (m.byOpt[m.result]||0)===0 && m.pool>0) h+=`<div class="result small muted">Nadie acertó: se devuelven las fichas.</div>`;
+      if(!open && m.result===undefined){
+        h+=`<div class="result small muted">Esperando su voto…</div>`;
+        if(canAdmin && !joined) h+=`<div class="row" style="margin-top:8px">${optSel('x-'+key,'')}<button class="btn ghost" onclick="setResult('${pid}','${r.rid}')">Anotar lo que votó</button></div>`;
+      }
+      for(const [g,list] of [['Votará a',p.parties||[]],['No vota',NOVOTE]]){
+        h+=`<div class="grp">${g}</div>`;
+        for(const o of list){
+          const amt=m.byOpt[o]||0, pct=m.pool?amt/m.pool*100:0, odds=amt?m.pool/amt:null;
+          const mine=m.bets.filter(b=>b.bettor===rid&&b.option===o).reduce((a,b)=>a+b.amount,0);
+          const clickable=open&&!isMe;
+          h+=`<div class="opt ${m.result===o?'win':''} ${S.sel[key]===o?'sel':''}" ${clickable?`onclick="pick('${key}',${esc(JSON.stringify(o))})"`:''}><span class="on">${esc(o)} <span class="pct">${fmt(pct)}%</span>${mine?` <span class="small" style="color:var(--mint)">· tuyo ${fmt(mine)}</span>`:''}</span><span class="odds">${odds?'×'+odds.toFixed(2):'—'}</span><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+        }
+      }
+      const myHere=m.bets.filter(b=>b.bettor===rid);
+      if(myHere.length && m.result!==undefined){ const got=myHere.reduce((a,b)=>a+payout(b),0), put=myHere.reduce((a,b)=>a+b.amount,0); h+=`<div class="gain">Pusiste ${fmt(put)} → cobras <b>${fmt(got)}</b> (${got-put>=0?'+':''}${fmt(got-put)})</div>`; }
+      if(open && !isMe){
+        h+=`<div class="slip"><div class="small muted" style="margin-bottom:8px">${S.sel[key]?`Apuesta a <b style="color:var(--ink)">${esc(S.sel[key])}</b>`:'Toca una opción de arriba'}</div>
+          <div class="row"><input id="a-${key}" data-keep type="number" min="1" step="1" placeholder="fichas" oninput="preview('${key}')"><span class="quick row" style="gap:6px"><button onclick="addAmt('${key}',10)">+10</button><button onclick="addAmt('${key}',50)">+50</button><button onclick="addAmt('${key}',100)">+100</button></span><button class="btn" onclick="placeBet('${pid}','${r.rid}')" ${S.busy?'disabled':''}>Apostar</button></div>
+          <div class="gain" id="g-${key}"></div></div>`;
+      } else if(open && isMe) h+=`<div class="gain">Sobre ti no puedes apostar 😉</div>`;
+      h+=`</div>`;
+    }
+    h+=`</div>`;
+  }
+  return h+`</div></div>`;
+}
+function renderRank(){
+  const rows=Object.keys(S.players).map(r=>({r,...balance(r)})).sort((a,b)=>b.bal-a.bal);
+  let h=`<div class="goal"><b>Qué es:</b> quién conoce mejor a la Tertulia. <b>Cómo se lee:</b> saldo = ${START} iniciales + lo cobrado − lo apostado; «en juego» son fichas en porras sin resolver.</div>`;
+  if(!rows.length) return h+`<div class="card center muted">Aún no hay nadie.</div>`;
+  const top=rows.slice(0,3), order=[top[1],top[0],top[2]];
+  h+=`<div class="podium">${order.map((x,i)=>x?`<div class="pod ${i===1?'p1':''}">${av(RNAME[x.r],'lg')}<div style="font-size:26px">${i===1?'🥇':i===0?'🥈':'🥉'}</div><div style="font-weight:700">${esc(RNAME[x.r])}</div><div class="big">${fmt(x.bal)}</div></div>`:'<div></div>').join('')}</div>`;
+  h+=`<div class="card"><table><thead><tr><th>#</th><th>Tertuliano</th><th class="num">Saldo</th><th class="num">En juego</th><th class="num">Ganancia</th><th class="num">Aciertos</th><th class="num">Apuestas</th></tr></thead><tbody>`;
+  rows.forEach((x,i)=>{ h+=`<tr ${x.r===me()?'style="background:#e9b94914"':''}><td>${i+1}</td><td><span class="row" style="gap:10px">${av(RNAME[x.r])}<b>${esc(RNAME[x.r])}</b></span></td><td class="num" style="color:var(--gold2);font-weight:700">${fmt(x.bal)}</td><td class="num">${fmt(x.inPlay)}</td><td class="num" style="color:${x.won>=0?'var(--mint)':'var(--coral)'}">${x.won>=0?'+':''}${fmt(x.won)}</td><td class="num">${x.hits}</td><td class="num">${x.n}</td></tr>`; });
+  return h+`</tbody></table></div>`;
+}
+function renderHelp(){
+  return `<div class="card" style="font-size:19px;max-width:1000px"><h2 style="margin-bottom:12px">Reglas de la casa</h2><ol style="padding-left:22px">
+   <li><b>Entra</b> tocando tu nombre y eligiendo un PIN: recibes ${START} fichas (de juego, no dinero).</li>
+   <li>Alguien <b>abre una porra</b> con las opciones de voto. Siempre están también «Se abstendrá» y «No votará».</li>
+   <li>Cada uno guarda su <b>voto secreto</b>.</li>
+   <li><b>Apuesta</b> a lo que hará cada tertuliano (sobre ti no puedes).</li>
+   <li><b>Bote común:</b> lo apostado sobre una persona se reparte entre quienes aciertan, según lo que puso cada uno. Cuota = bote ÷ fichas en esa opción.</li>
+   <li>Quien abrió la porra <b>cierra las apuestas</b>; cada uno <b>revela</b> y se paga al momento. Si alguien no ha entrado en la web, quien abrió la porra anota lo que votó.</li>
+   <li>Si nadie acierta lo de alguien, se <b>devuelven</b> las fichas.</li></ol>
+  <p class="muted small">Ejemplo: sobre Pascual hay 300 fichas, 200 a «Perce» y 100 a «No votará». Cuota de «No votará» = ×3. Si Pascual no vota, quien puso 50 cobra 150.</p></div>`;
+}
+
+(async function init(){
+  try{ S.sess = JSON.parse(localStorage.getItem('porra_sess')||'null'); }catch(_){}
+  render(); await refresh(); await loadBallot(); render();
+  setInterval(()=>{ if(!document.hidden && !S.busy) refresh(); }, 4000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refresh(); });
+})();
+
+</script>
+</body>
+</html>
